@@ -28,11 +28,13 @@ func (t *TCP) Collect() error {
 	for {
 		line, err := reader.ReadString('\n')
 		if err == io.EOF {
-			return err
+			break
 		}
+
 		if err != nil {
 			return err
 		}
+
 		if !strings.Contains(line, "Tcp") || strings.Contains(line, "RtoAlgorithm") {
 			continue
 		}
