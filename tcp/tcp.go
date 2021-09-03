@@ -18,7 +18,7 @@ type TCP struct {
 }
 
 // Detect 采集整机重传率
-func (t *TCP) Detect() error {
+func (t *TCP) Collect() error {
 	f, err := os.Open("/proc/net/snmp")
 	if err != nil {
 		return err
