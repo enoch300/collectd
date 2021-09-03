@@ -53,6 +53,7 @@ func (t *TCP) Collect() error {
 		t.RetransSegs = retransSegs
 		t.LastTime = time.Now().Unix()
 	}
+	return nil
 }
 
 func (t *TCP) GetRetranRate() float64 {
