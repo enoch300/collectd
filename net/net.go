@@ -29,33 +29,33 @@ func (n *Ifi) IsInEth(filterIps []string) bool {
 }
 
 type Ifi struct {
-	Name              string  //网卡接口
-	Ip                string  //网卡IP
-	Speed             float64 //网卡速率
-	OutRecvPkgErrRate float64 //外网收包错误率
-	OutSendPkgErrRate float64 //外网发包错误率
-	RecvByte          uint64  //接收的字节数
-	RecvPkg           uint64  //接收正确的包数
-	RecvErr           uint64  //接收错误的包数
-	RecvDrop          uint64  //接收错误的包数
-	SendByte          uint64  //发送的字节数
-	SendPkg           uint64  //发送正确的包数
-	SendErr           uint64  //发送错误的包数
-	SendDrop          uint64  //发送错误的包数
+	Name  string  //网卡接口
+	Ip    string  //网卡IP
+	Speed float64 //网卡速率
 
-	RecvByteAvg    float64 //一个周期平均每秒接收字节数
-	RecvPkgAvg     float64 //一个周期平均每秒收包数
-	RecvErrRate    float64 //一个周期收包错误率
-	RecvDropRate   float64 //一个周期收包丢包率
+	RecvByte uint64 //接收字节数
+	RecvPkg  uint64 //接收包数
+	RecvErr  uint64 //接收错误包数
+	RecvDrop uint64 //接收丢包包数
+
+	SendByte uint64 //发送字节数
+	SendPkg  uint64 //发送包数
+	SendErr  uint64 //发送错误包数
+	SendDrop uint64 //发送丢包包数
+
+	RecvByteAvg    float64 //一个周期平均接收字节数
+	RecvPkgAvg     float64 //一个周期平均接收包数
 	RecvErrPkgAvg  float64 //一个周期平均收包错误数
 	RecvDropPkgAvg float64 //一个周期平均收包丢包数
+	RecvErrRate    float64 //一个周期收包错误率
+	RecvDropRate   float64 //一个周期收包丢包率
 
-	SendByteAvg    float64 //一个周期平均每秒发送字节数
-	SendPkgAvg     float64 //一个周期平均每秒发包数
-	SendErrRate    float64 //一个周期发包错误率
-	SendDropRate   float64 //一个周期发包丢包率
+	SendByteAvg    float64 //一个周期平均发送字节数
+	SendPkgAvg     float64 //一个周期平均发送包数
 	SendErrPkgAvg  float64 //一个周期平均发包错误数
 	SendDropPkgAvg float64 //一个周期平均发包丢包数
+	SendErrRate    float64 //一个周期发包错误率
+	SendDropRate   float64 //一个周期发包丢包率
 
 	BandwidthLimit int   //0不限制, 1被限制
 	Last           int64 //上次采集时间
@@ -71,30 +71,42 @@ type NetWork struct {
 	IPV6      bool
 
 	//内网
-	InRecvByteAvg float64 //所有内网网络接口平均每秒接收字节数
-	InSendByteAvg float64 //所有内网网络接口平均每秒发送字节数
+	InRecvByteAvg float64 //所有内网网络接口平均接收字节数
+	InSendByteAvg float64 //所有内网网络接口平均发送字节数
 
-	InRecvPkgAvg float64 //所有内网网络接口平均每秒收包数
-	InSendPkgAvg float64 //所有内网网络接口平均每秒发包数
+	InRecvPkgAvg float64 //所有内网网络接口平均收包数
+	InSendPkgAvg float64 //所有内网网络接口平均发包数
 
-	InRecvErrPkgAvg float64 //所有内网网络接口平均每秒收包错误数
-	InSendErrPkgAvg float64 //所有内网网络接口平均每秒发包错误数
+	InRecvErrPkgAvg float64 //所有内网网络接口平均收包错误数
+	InSendErrPkgAvg float64 //所有内网网络接口平均发包错误数
 
-	InSendDropPkgAvg float64 //所有内网网络接口平均每秒发包丢包数
-	InRecvDropPkgAvg float64 //所有内网网络接口平均每秒收包丢包数
+	InRecvDropPkgAvg float64 //所有内网网络接口平均收包丢包数
+	InSendDropPkgAvg float64 //所有内网网络接口平均发包丢包数
+
+	InRecvDropPkgRate float64 //所有内网网络接口收包丢包率
+	InSendDropPkgRate float64 //所有内网网络接口发包丢包率
+
+	InRecvErrPkgRate float64 //所有内网网络接口收包错误率
+	InSendErrPkgRate float64 //所有内网网络接口发包错误率
 
 	//外网
-	OutRecvDropPkgAvg float64 //所有外网接口平均每秒接收丢包数
-	OutSendDropPkgAvg float64 //所有外网接口平均每秒发送丢包数
+	OutRecvDropPkgAvg float64 //所有外网接口平均接收丢包数
+	OutSendDropPkgAvg float64 //所有外网接口平均发送丢包数
 
-	OutRecvErrPkgAvg float64 //所有外网接口平均每秒接收错误数
-	OutSendErrPkgAvg float64 //所有外网接口平均每秒发送错误数
+	OutRecvErrPkgAvg float64 //所有外网接口平均接收错误数
+	OutSendErrPkgAvg float64 //所有外网接口平均发送错误数
 
-	OutRecvPkgAvg float64 //所有外网接口平均每秒接收包数
-	OutSendPkgAvg float64 //所有外网接口平均每秒发送包数
+	OutRecvPkgAvg float64 //所有外网接口平均接收包数
+	OutSendPkgAvg float64 //所有外网接口平均发送包数
 
-	OutRecvByteAvg float64 //所有外网接口平均每秒接收字节数
-	OutSendByteAvg float64 //所有外网接口平均每秒发送字节数
+	OutRecvByteAvg float64 //所有外网接口平均接收字节数
+	OutSendByteAvg float64 //所有外网接口平均发送字节数
+
+	OutRecvDropPkgRate float64 //所有外网接口平均接收丢包率
+	OutSendDropPkgRate float64 //所有外网接口平均发送丢包率
+
+	OutRecvErrPkgRate float64 //所有外网接口平均接收错误率
+	OutSendErrPkgRate float64 //所有外网接口平均发送错误率
 
 	EthInMaxUseRate  float64 //内网网卡使用率
 	EthOutMaxUseRate float64 //外网网卡使用率
@@ -139,10 +151,10 @@ func (n *NetWork) isIgnore(ehtName string, ethIps []net.Addr) bool {
 		}
 	}
 
-	ignoreFlag := true
+	ignoreFlag := false
 	if len(ethIps) == 1 {
 		if strings.Contains(ethIps[0].String(), ":") {
-			ignoreFlag = n.IPV6
+			ignoreFlag = !n.IPV6
 		} else {
 			for _, ignoreIP := range n.IgnoreIP {
 				utils.Trim(&ignoreIP)
@@ -155,25 +167,19 @@ func (n *NetWork) isIgnore(ehtName string, ethIps []net.Addr) bool {
 	}
 
 	if len(ethIps) > 1 {
-		f1 := true
-		f2 := true
-
 		for _, ethIp := range ethIps {
 			if strings.Contains(ethIps[0].String(), ":") {
-				f1 = n.IPV6
 				continue
 			}
 
 			for _, ignoreIP := range n.IgnoreIP {
 				if strings.HasPrefix(ethIp.String(), ignoreIP) {
-					f2 = false
+					ignoreFlag = true
+					break
 				}
 			}
 		}
-
-		ignoreFlag = f1 && f2
 	}
-
 	return ignoreFlag
 }
 
@@ -190,7 +196,7 @@ func (n *NetWork) isInIP(Ifi *Ifi) bool {
 	return false
 }
 
-func (n *NetWork) total(ifi *Ifi) {
+func (n *NetWork) reset() {
 
 	//内网
 	n.InRecvByteAvg = 0
@@ -205,6 +211,12 @@ func (n *NetWork) total(ifi *Ifi) {
 	n.InRecvDropPkgAvg = 0
 	n.InSendDropPkgAvg = 0
 
+	n.InRecvDropPkgRate = 0
+	n.InSendDropPkgRate = 0
+
+	n.InRecvErrPkgRate = 0
+	n.InSendErrPkgRate = 0
+
 	//外网
 	n.OutRecvPkgAvg = 0
 	n.OutSendPkgAvg = 0
@@ -213,11 +225,19 @@ func (n *NetWork) total(ifi *Ifi) {
 	n.OutSendByteAvg = 0
 
 	n.OutSendErrPkgAvg = 0
+	n.OutRecvErrPkgAvg = 0
+
+	n.OutRecvDropPkgAvg = 0
 	n.OutSendDropPkgAvg = 0
 
-	n.OutRecvErrPkgAvg = 0
-	n.OutRecvDropPkgAvg = 0
+	n.OutRecvDropPkgRate = 0
+	n.OutSendDropPkgRate = 0
 
+	n.OutRecvErrPkgRate = 0
+	n.OutSendErrPkgRate = 0
+}
+
+func (n *NetWork) total(ifi *Ifi) {
 	if n.isInIP(ifi) {
 		//内网
 		n.InRecvByteAvg += ifi.RecvByteAvg
@@ -226,11 +246,17 @@ func (n *NetWork) total(ifi *Ifi) {
 		n.InRecvPkgAvg += ifi.RecvPkgAvg
 		n.InSendPkgAvg += ifi.SendPkgAvg
 
-		n.InSendErrPkgAvg += ifi.SendErrPkgAvg
 		n.InRecvErrPkgAvg += ifi.RecvErrPkgAvg
+		n.InSendErrPkgAvg += ifi.SendErrPkgAvg
 
-		n.InSendDropPkgAvg += ifi.SendDropPkgAvg
 		n.InRecvDropPkgAvg += ifi.RecvDropPkgAvg
+		n.InSendDropPkgAvg += ifi.SendDropPkgAvg
+
+		n.InRecvErrPkgRate += ifi.RecvErrRate
+		n.InSendErrPkgRate += ifi.SendErrRate
+
+		n.InRecvDropPkgRate += ifi.RecvDropRate
+		n.InSendDropPkgRate += ifi.SendDropRate
 	} else {
 		//外网
 		n.OutRecvPkgAvg += ifi.RecvPkgAvg
@@ -244,10 +270,18 @@ func (n *NetWork) total(ifi *Ifi) {
 
 		n.OutRecvErrPkgAvg += ifi.RecvErrPkgAvg
 		n.OutRecvDropPkgAvg += ifi.RecvDropPkgAvg
+
+		n.OutRecvErrPkgRate += ifi.RecvErrRate
+		n.OutSendErrPkgRate += ifi.SendErrRate
+
+		n.OutRecvDropPkgRate += ifi.RecvDropRate
+		n.OutSendDropPkgRate += ifi.SendDropRate
 	}
 }
 
 func (n *NetWork) Collect() error {
+	n.reset()
+
 	f, err := os.Open("/proc/net/dev")
 	if err != nil {
 		return err
@@ -364,33 +398,38 @@ func (n *NetWork) Collect() error {
 		ifi.Ip = strings.Split(addrs[0].String(), "/")[0]
 
 		ifi.RecvByte = recvByte
-		ifi.RecvPkg = recvPkg
-		ifi.RecvErr = recvErr
-		ifi.RecvDrop = recvDrop
-
-		ifi.RecvPkgAvg = recvPkgAvg
-		ifi.RecvByteAvg = recvByteAvg
-		ifi.RecvErrRate = recvErrRate
-		ifi.RecvDropRate = recvDropRate
-		ifi.RecvDropPkgAvg = recvErrPkgAvg
-		ifi.RecvErrPkgAvg = recvDropPkgAvg
-
 		ifi.SendByte = sendByte
+
+		ifi.RecvPkg = recvPkg
 		ifi.SendPkg = sendPkg
+
+		ifi.RecvErr = recvErr
 		ifi.SendErr = sendErr
+
+		ifi.RecvDrop = recvDrop
 		ifi.SendDrop = sendDrop
 
+		ifi.RecvPkgAvg = recvPkgAvg
 		ifi.SendPkgAvg = sendPkgAvg
+
+		ifi.RecvByteAvg = recvByteAvg
 		ifi.SendByteAvg = sendByteAvg
+
+		ifi.RecvErrRate = recvErrRate
 		ifi.SendErrRate = sendErrRate
+
+		ifi.RecvDropRate = recvDropRate
 		ifi.SendDropRate = sendDropRate
+
+		ifi.RecvDropPkgAvg = recvErrPkgAvg
 		ifi.SendDropPkgAvg = sendDropPkgAvg
+
+		ifi.RecvErrPkgAvg = recvDropPkgAvg
 		ifi.SendErrPkgAvg = sendErrPkgAvg
 
 		ifi.Last = now
 
 		n.total(ifi)
-
 		n.RecvSendDetail += ifi.Ip + "=" + ifi.Name + "=(" + strconv.FormatFloat(recvByteAvg, 'f', 0, 64) + "|" +
 			strconv.FormatFloat(sendByteAvg, 'f', 0, 64) + ")$"
 
@@ -464,13 +503,13 @@ func (n *NetWork) InRecvPkgSumFunc() float64 {
 	return utils.FormatFloat(n.InRecvPkgAvg)
 }
 
-// InEthRecvByteAvgFunc 所有内网平均网入带宽(byte/s)
-func (n *NetWork) InEthRecvByteAvgFunc() float64 {
+// InRecvByteAvgFunc 所有内网平均网入带宽(byte/s)
+func (n *NetWork) InRecvByteAvgFunc() float64 {
 	return utils.FormatFloat(n.InRecvByteAvg)
 }
 
-// InEthSendByteAvgFunc 所有内网平均网出带宽(byte/s)
-func (n *NetWork) InEthSendByteAvgFunc() float64 {
+// InSendByteAvgFunc 所有内网平均网出带宽(byte/s)
+func (n *NetWork) InSendByteAvgFunc() float64 {
 	return utils.FormatFloat(n.InSendByteAvg)
 }
 
@@ -496,34 +535,22 @@ func (n *NetWork) OutEthSendByteAvgFunc() float64 {
 
 // OutRecvErrPkgRateFun 所有外网网卡接收错误率
 func (n *NetWork) OutRecvErrPkgRateFun() float64 {
-	if n.OutRecvErrPkgAvg == 0 && n.OutRecvPkgAvg == 0 {
-		return 0
-	}
-	return utils.FormatFloat(n.OutRecvErrPkgAvg / n.OutRecvPkgAvg * 100)
+	return utils.FormatFloat(n.OutRecvErrPkgRate)
 }
 
 // OutRecvDropPkgRateFun 所有外网网卡接收丢包率
 func (n *NetWork) OutRecvDropPkgRateFun() float64 {
-	if n.OutRecvDropPkgAvg == 0 && n.OutRecvPkgAvg == 0 {
-		return 0
-	}
-	return utils.FormatFloat(n.OutRecvDropPkgAvg / n.OutRecvPkgAvg * 100)
+	return utils.FormatFloat(n.OutRecvDropPkgRate)
 }
 
 // OutSendErrPkgRateFun 所有外网网卡发送错误率
 func (n *NetWork) OutSendErrPkgRateFun() float64 {
-	if n.OutSendErrPkgAvg == 0 && n.OutSendPkgAvg == 0 {
-		return 0
-	}
-	return utils.FormatFloat(n.OutSendErrPkgAvg / n.OutSendPkgAvg * 100)
+	return utils.FormatFloat(n.OutSendErrPkgRate)
 }
 
 // OutSendDropPkgRateFun 所有外网网卡发送丢包率
 func (n *NetWork) OutSendDropPkgRateFun() float64 {
-	if n.OutSendDropPkgAvg == 0 && n.OutSendPkgAvg == 0 {
-		return 0
-	}
-	return utils.FormatFloat(n.OutSendDropPkgAvg / n.OutSendPkgAvg * 100)
+	return utils.FormatFloat(n.OutSendDropPkgRate)
 }
 
 // EthInMaxUseRateFunc 所有网卡入带宽最大使用率
