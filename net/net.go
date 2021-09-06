@@ -147,7 +147,7 @@ func (n *NetWork) isIgnore(ehtName string, ethIps []net.Addr) bool {
 			for _, ignoreIP := range n.IgnoreIP {
 				utils.Trim(&ignoreIP)
 				if strings.HasPrefix(ethIps[0].String(), ignoreIP) {
-					ignoreFlag = false
+					ignoreFlag = true
 					break
 				}
 			}
