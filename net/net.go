@@ -1,4 +1,4 @@
-package collectd
+package net
 
 import (
 	"bufio"
