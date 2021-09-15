@@ -144,7 +144,7 @@ func NewNetwork(ignoreIP, ignoreEth, inIp, InEth []string) *NetWork {
 	}
 }
 
-func (n *NetWork) isIgnore(ehtName string, ethIps []net.Addr) bool {
+func (n *NetWork) IsIgnore(ehtName string, ethIps []net.Addr) bool {
 	for _, eth := range n.IgnoreEth {
 		if strings.HasPrefix(ehtName, eth) {
 			return true
@@ -183,7 +183,7 @@ func (n *NetWork) isIgnore(ehtName string, ethIps []net.Addr) bool {
 	return ignoreFlag
 }
 
-func (n *NetWork) isInIP(Ifi *Ifi) bool {
+func (n *NetWork) IsInIP(Ifi *Ifi) bool {
 	if Ifi.Ip == "" {
 		return false
 	}
@@ -238,7 +238,7 @@ func (n *NetWork) reset() {
 }
 
 func (n *NetWork) total(ifi *Ifi) {
-	if n.isInIP(ifi) {
+	if n.IsInIP(ifi) {
 		//内网
 		n.InRecvByteAvg += ifi.RecvByteAvg
 		n.InSendByteAvg += ifi.SendByteAvg
@@ -341,7 +341,7 @@ func (n *NetWork) Collect() error {
 			continue
 		}
 
-		if n.isIgnore(ethName, addrs) {
+		if n.IsIgnore(ethName, addrs) {
 			continue
 		}
 
