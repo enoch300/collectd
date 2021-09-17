@@ -133,17 +133,6 @@ type NetWork struct {
 	*/
 }
 
-func NewNetwork(ignoreIP, ignoreEth, inIp, InEth []string) *NetWork {
-	return &NetWork{
-		IfiMap:    make(map[string]*Ifi),
-		IfiNames:  []string{},
-		IgnoreIP:  ignoreIP,
-		IgnoreEth: ignoreEth,
-		InIP:      inIp,
-		InEth:     InEth,
-	}
-}
-
 func (n *NetWork) IsIgnore(ehtName string, ethIps []net.Addr) bool {
 	for _, eth := range n.IgnoreEth {
 		if strings.HasPrefix(ehtName, eth) {
@@ -342,6 +331,15 @@ func (n *NetWork) Collect() error {
 		}
 
 		if n.IsIgnore(ethName, addrs) {
+			_, exists := n.IfiMap[ethName]
+			if exists {
+				delete(n.IfiMap, ethName)
+			}
+
+			n.IfiNames = []string{}
+			for eth, _ := range n.IfiMap {
+				n.IfiNames = append(n.IfiNames, eth)
+			}
 			continue
 		}
 
@@ -469,6 +467,17 @@ func (n *NetWork) Collect() error {
 		n.ModelDetail += fmt.Sprintf("%v|%v|%v$", ifi.Name, ifi.Ip, ifi.Speed)
 	}
 	return nil
+}
+
+func NewNetwork(ignoreIP, ignoreEth, inIp, InEth []string) *NetWork {
+	return &NetWork{
+		IfiMap:    make(map[string]*Ifi),
+		IfiNames:  []string{},
+		IgnoreIP:  ignoreIP,
+		IgnoreEth: ignoreEth,
+		InIP:      inIp,
+		InEth:     InEth,
+	}
 }
 
 //  +++++ 整机指标 +++++
