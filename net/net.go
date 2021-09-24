@@ -13,21 +13,6 @@ import (
 	"time"
 )
 
-// IsInEth 判断是否为内网
-func (n *Ifi) IsInEth(filterIps []string) bool {
-	if n.Ip == "" {
-		return false
-	}
-
-	for _, ipPrefix := range filterIps {
-		utils.Trim(&ipPrefix)
-		if strings.HasPrefix(n.Ip, ipPrefix) {
-			return true
-		}
-	}
-	return false
-}
-
 type Ifi struct {
 	Name  string  //网卡接口
 	Ip    string  //网卡IP
@@ -133,6 +118,32 @@ type NetWork struct {
 	*/
 }
 
+// IsInEth 判断是否为内网
+func (n *Ifi) IsInEth(filterIps []string) bool {
+	if n.Ip == "" {
+		return false
+	}
+
+	for _, ipPrefix := range filterIps {
+		utils.Trim(&ipPrefix)
+		if strings.HasPrefix(n.Ip, ipPrefix) {
+			return true
+		}
+	}
+	return false
+}
+
+func FilterIPV4(ethIps []net.Addr) (ipv4 []string, ipv6 []string) {
+	for _, ip := range ethIps {
+		if strings.Contains(ip.String(), ":") {
+			ipv6 = append(ipv6, ip.String())
+		} else {
+			ipv4 = append(ipv4, ip.String())
+		}
+	}
+	return
+}
+
 func (n *NetWork) IsIgnore(ehtName string, ethIps []net.Addr) bool {
 	for _, eth := range n.IgnoreEth {
 		if strings.HasPrefix(ehtName, eth) {
@@ -141,13 +152,22 @@ func (n *NetWork) IsIgnore(ehtName string, ethIps []net.Addr) bool {
 	}
 
 	ignoreFlag := false
-	if len(ethIps) == 1 {
-		if strings.Contains(ethIps[0].String(), ":") {
-			ignoreFlag = !n.IPV6
-		} else {
+	ipv4List, _ := FilterIPV4(ethIps)
+
+	if len(ipv4List) == 1 {
+		for _, ignoreIP := range n.IgnoreIP {
+			utils.Trim(&ignoreIP)
+			if strings.HasPrefix(ipv4List[0], ignoreIP) {
+				ignoreFlag = true
+				break
+			}
+		}
+	}
+
+	if len(ipv4List) > 1 {
+		for _, ip := range ipv4List {
 			for _, ignoreIP := range n.IgnoreIP {
-				utils.Trim(&ignoreIP)
-				if strings.HasPrefix(ethIps[0].String(), ignoreIP) {
+				if strings.HasPrefix(ip, ignoreIP) {
 					ignoreFlag = true
 					break
 				}
@@ -155,20 +175,10 @@ func (n *NetWork) IsIgnore(ehtName string, ethIps []net.Addr) bool {
 		}
 	}
 
-	if len(ethIps) > 1 {
-		for _, ethIp := range ethIps {
-			if strings.Contains(ethIps[0].String(), ":") {
-				continue
-			}
-
-			for _, ignoreIP := range n.IgnoreIP {
-				if strings.HasPrefix(ethIp.String(), ignoreIP) {
-					ignoreFlag = true
-					break
-				}
-			}
-		}
+	if len(ipv4List) == 0 {
+		ignoreFlag = !n.IPV6
 	}
+
 	return ignoreFlag
 }
 
